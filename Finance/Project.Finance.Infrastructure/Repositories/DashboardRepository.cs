@@ -29,17 +29,17 @@ public class DashboardRepository(FinanceDbContext dbContext) : IDashboardReposit
             .ToListAsync();
 
         var outputTypes = await dbContext.OutputDbSet
-                    .Where(e => e.Date.Year == year && e.Date.Month == month)
-                    .GroupBy(o => new { o.OutputType.Description })
-                    .Select(g => new
-                    {
-                        g.Key.Description,
-                        Amount = g.Count()
-                    })
-                    .OrderByDescending(x => x.Amount)
-                    .ThenBy(x => x.Description)
-                    .Take(10)
-                    .ToListAsync();
+            .Where(e => e.Date.Year == year && e.Date.Month == month)
+            .GroupBy(o => o.OutputType.Description)
+            .Select(g => new
+            {
+                Description = g.Key,
+                Amount = g.Count()
+            })
+            .OrderByDescending(x => x.Amount)
+            .ThenBy(x => x.Description)
+            .Take(10)
+            .ToListAsync();
 
         var totalInput = inputOutputData.FirstOrDefault(e => e.Month == month)?.TotalInput ?? 0;
         var totalOutput = outputData.FirstOrDefault(e => e.Month == month)?.TotalOutput ?? 0;
@@ -49,7 +49,7 @@ public class DashboardRepository(FinanceDbContext dbContext) : IDashboardReposit
             TotalInput = totalInput,
             TotalOutput = totalOutput,
             PercentSpent = totalInput != 0 ? Math.Round((totalOutput / totalInput) * -100, 2) : 0,
-            RemainingAmount = Math.Round(totalInput + totalOutput, 2)
+            RemainingAmount = totalOutput > totalInput ? Math.Round(totalInput - totalOutput, 2) : Math.Round(totalInput + totalOutput, 2)
         };
 
         foreach (var outputType in outputTypes)
