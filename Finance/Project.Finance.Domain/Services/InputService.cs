@@ -6,27 +6,27 @@ namespace Project.Finance.Domain.Services;
 
 public class InputService(IInputRepository repository) : IInputService
 {
-    public async Task<List<Input>> GetAll()
+    public Task<List<Input>> GetAll()
     {
-        return await repository.GetAll();
+        return repository.GetAll();
     }
 
-    public async Task<Input?> GetById(Guid id)
+    public Task<Input?> GetById(Guid id)
     {
-        return await repository.GetById(id);
+        return repository.GetById(id);
     }
 
-    public async Task<Input> Insert(Input entity)
+    public Task<Input> Insert(Input entity)
     {
-        return await repository.Insert(entity);
+        return repository.Insert(entity);
     }
 
-    public async Task<Input> Update(Guid id, Input entity)
+    public Task<Input> Update(Guid id, Input entity)
     {
-        return await repository.Update(id, entity);
+        return repository.Update(id, entity);
     }
-    public async Task<Input> Delete(Guid id)
+    public Task<Input> Delete(Guid id)
     {
-        return await repository.Delete(id);
+        return repository.Delete(id);
     }
 }

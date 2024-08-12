@@ -8,7 +8,7 @@ public class InputRepository(FinanceDbContext dbContext) : IInputRepository
 {
     public async Task<List<Input>> GetAll()
     {
-        return await dbContext.InputDbSet.OrderByDescending(e => e.Date).Take(20).ToListAsync();
+        return await dbContext.InputDbSet.OrderByDescending(e => e.Date).ToListAsync();
     }
 
     public async Task<Input?> GetById(Guid id)

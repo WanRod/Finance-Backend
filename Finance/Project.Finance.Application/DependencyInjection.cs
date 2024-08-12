@@ -19,6 +19,9 @@ public static class DependencyInjection
         services.AddScoped<IOutputRepository, OutputRepository>();
         services.AddScoped<IOutputService, OutputService>();
 
+        services.AddScoped<IDashboardRepository, DashboardRepository>();
+        services.AddScoped<IDashboardService, DashboardService>();
+
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DependencyInjection).Assembly));
         services.AddAutoMapper(typeof(DependencyInjection).Assembly);
 

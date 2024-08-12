@@ -6,35 +6,35 @@ namespace Project.Finance.Controllers;
 
 [ApiController]
 [Route("api/finance/input")]
-public class InputController(IMediator mediator) : ControllerBase
+public class InputController(IMediator mediator)
 {
     [HttpGet]
-    public async Task<List<InputResponse>> GetAll()
+    public Task<List<InputResponse>> GetAll()
     {
-        return await mediator.Send(new InputGetAllRequest());
+        return mediator.Send(new InputGetAllRequest());
     }
 
     [HttpGet("{id}")]
-    public async Task<InputResponse> GetById(Guid id)
+    public Task<InputResponse> GetById(Guid id)
     {
-        return await mediator.Send(new InputGetByIdRequest(id));
+        return mediator.Send(new InputGetByIdRequest(id));
     }
 
     [HttpPost]
-    public async Task<InputResponse> Insert([FromBody] InputInsertRequest request)
+    public Task<InputResponse> Insert([FromBody] InputInsertRequest request)
     {
-        return await mediator.Send(request);
+        return mediator.Send(request);
     }
 
     [HttpPut]
-    public async Task<InputResponse> Update([FromBody] InputUpdateRequest request)
+    public Task<InputResponse> Update([FromBody] InputUpdateRequest request)
     {
-        return await mediator.Send(request);
+        return mediator.Send(request);
     }
 
     [HttpDelete("{id}")]
-    public async Task<InputResponse> Delete(Guid id)
+    public Task<InputResponse> Delete(Guid id)
     {
-        return await mediator.Send(new InputDeleteRequest(id));
+        return mediator.Send(new InputDeleteRequest(id));
     }
 }

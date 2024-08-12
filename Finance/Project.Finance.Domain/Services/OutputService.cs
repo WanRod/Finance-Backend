@@ -6,27 +6,27 @@ namespace Project.Finance.Domain.Services;
 
 public class OutputService(IOutputRepository repository) : IOutputService
 {
-    public async Task<List<Output>> GetAll()
+    public Task<List<Output>> GetAll()
     {
-        return await repository.GetAll();
+        return repository.GetAll();
     }
 
-    public async Task<Output?> GetById(Guid id)
+    public Task<Output?> GetById(Guid id)
     {
-        return await repository.GetById(id);
+        return repository.GetById(id);
     }
 
-    public async Task<Output> Insert(Output entity)
+    public Task<Output> Insert(Output entity)
     {
-        return await repository.Insert(entity);
+        return repository.Insert(entity);
     }
 
-    public async Task<Output> Update(Guid id, Output entity)
+    public Task<Output> Update(Guid id, Output entity)
     {
-        return await repository.Update(id, entity);
+        return repository.Update(id, entity);
     }
-    public async Task<Output> Delete(Guid id)
+    public Task<Output> Delete(Guid id)
     {
-        return await repository.Delete(id);
+        return repository.Delete(id);
     }
 }

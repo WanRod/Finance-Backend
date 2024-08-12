@@ -8,7 +8,7 @@ public class OutputTypeRepository(FinanceDbContext dbContext) : IOutputTypeRepos
 {
     public async Task<List<OutputType>> GetAll()
     {
-        return await dbContext.OutputTypeDbSet.OrderBy(e => e.Description).Take(20).ToListAsync();
+        return await dbContext.OutputTypeDbSet.OrderBy(e => e.Description).ToListAsync();
     }
 
     public async Task<OutputType?> GetById(Guid id)
