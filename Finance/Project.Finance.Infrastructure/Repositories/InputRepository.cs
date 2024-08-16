@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.Finance.Domain.Entites;
+using Project.Finance.Domain.Interfaces;
 using Project.Finance.Domain.Interfaces.Repositories;
 
 namespace Project.Finance.Infrastructure.Repositories;
 
-public class InputRepository(FinanceDbContext dbContext) : IInputRepository
+public class InputRepository(FinanceDbContext dbContext, IUserContext userContext) : IInputRepository
 {
     public async Task<List<Input>> GetAll()
     {
-        return await dbContext.InputDbSet.OrderByDescending(e => e.Date).ToListAsync();
+        return await dbContext.InputDbSet.Where(e => e.CreatedBy == userContext.UserId).OrderByDescending(e => e.Date).ToListAsync();
     }
 
     public async Task<Input?> GetById(Guid id)
@@ -16,31 +17,28 @@ public class InputRepository(FinanceDbContext dbContext) : IInputRepository
         return await dbContext.InputDbSet.FindAsync(id);
     }
 
-    public async Task<Input> Insert(Input entity)
+    public async Task Insert(Input entity)
     {
+        entity.CreatedBy = userContext.UserId;
+
         dbContext.InputDbSet.Add(entity);
         await dbContext.SaveChangesAsync();
-
-        return entity;
     }
 
-    public async Task<Input> Update(Guid id, Input entity)
+    public async Task Update(Guid id, Input entity)
     {
         var currentyEntity = await dbContext.InputDbSet.FindAsync(id) ?? throw new Exception();
+        entity.CreatedBy = currentyEntity.CreatedBy;
 
         dbContext.Update(currentyEntity).CurrentValues.SetValues(entity);
         await dbContext.SaveChangesAsync();
-
-        return entity;
     }
 
-    public async Task<Input> Delete(Guid id)
+    public async Task Delete(Guid id)
     {
         var entity = await dbContext.InputDbSet.FindAsync(id) ?? throw new Exception();
 
         dbContext.InputDbSet.Remove(entity);
         await dbContext.SaveChangesAsync();
-
-        return entity;
     }
 }

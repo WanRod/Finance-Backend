@@ -22,6 +22,9 @@ public class Output
     [Column("date")]
     public DateOnly Date { get; set; }
 
+    [Column("created_by")]
+    public Guid CreatedBy { get; set; }
+
     [ForeignKey("OutputTypeId")]
     public required OutputType OutputType { get; set; }
 }

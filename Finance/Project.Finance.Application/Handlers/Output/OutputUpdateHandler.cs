@@ -5,17 +5,11 @@ using Project.Finance.Domain.Interfaces.Services;
 
 namespace Project.Finance.Application.Handlers.Output;
 
-public class OutputUpdateHandler(IOutputService service, IMapper mapper) : IRequestHandler<OutputUpdateRequest, OutputResponse>
+public class OutputUpdateHandler(IOutputService service, IMapper mapper) : IRequestHandler<OutputUpdateRequest>
 {
-    public async Task<OutputResponse> Handle(OutputUpdateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(OutputUpdateRequest request, CancellationToken cancellationToken)
     {
-        if (request.Value > 0)
-        {
-            request.Value *= -1;
-        }
-
         var output = mapper.Map<Domain.Entites.Output>(request);
-        var outputUpdated = await service.Update(output.Id, output);
-        return mapper.Map<OutputResponse>(outputUpdated);
+        await service.Update(output.Id, output);
     }
 }

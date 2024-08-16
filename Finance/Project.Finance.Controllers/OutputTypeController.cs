@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.Finance.Application.Commands.OutputType;
 
@@ -6,35 +7,46 @@ namespace Project.Finance.Controllers;
 
 [ApiController]
 [Route("api/finance/output-type")]
-public class OutputTypeController(IMediator mediator)
+public class OutputTypeController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [Authorize]
     public Task<List<OutputTypeResponse>> GetAll()
     {
         return mediator.Send(new OutputTypeGetAllRequest());
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public Task<OutputTypeResponse> GetById(Guid id)
     {
         return mediator.Send(new OutputTypeGetByIdRequest(id));
     }
 
     [HttpPost]
-    public Task<OutputTypeResponse> Insert([FromBody] OutputTypeInsertRequest request)
+    [Authorize]
+    public async Task<IActionResult> Insert([FromBody] OutputTypeInsertRequest request)
     {
-        return mediator.Send(request);
+        await mediator.Send(request);
+        Response.StatusCode = 201;
+        return Created();
     }
 
     [HttpPut]
-    public Task<OutputTypeResponse> Update([FromBody] OutputTypeUpdateRequest request)
+    [Authorize]
+    public async Task<IActionResult> Update([FromBody] OutputTypeUpdateRequest request)
     {
-        return mediator.Send(request);
+        await mediator.Send(request);
+
+        return Ok();
     }
 
     [HttpDelete("{id}")]
-    public Task<OutputTypeResponse> Delete(Guid id)
+    [Authorize]
+    public async Task<IActionResult> Delete(Guid id)
     {
-        return mediator.Send(new OutputTypeDeleteRequest(id));
+        await mediator.Send(new OutputTypeDeleteRequest(id));
+
+        return Ok();
     }
 }

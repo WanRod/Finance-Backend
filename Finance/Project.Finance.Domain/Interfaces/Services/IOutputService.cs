@@ -8,9 +8,9 @@ public interface IOutputService
 
     Task<Output?> GetById(Guid id);
 
-    Task<Output> Insert(Output entity);
+    Task Insert(Output entity);
 
-    Task<Output> Update(Guid id, Output entity);
+    Task Update(Guid id, Output entity);
 
-    Task<Output> Delete(Guid id);
+    Task Delete(Guid id);
 }

@@ -5,7 +5,7 @@ namespace Project.Finance.Infrastructure;
 
 public class FinanceDbContext : DbContext
 {
-    //Created database if not exists
+    //Create database if not exists
     public FinanceDbContext(DbContextOptions<FinanceDbContext> options) : base(options)
     {
         Database.EnsureCreated();
@@ -23,4 +23,5 @@ public class FinanceDbContext : DbContext
 
     public DbSet<Output> OutputDbSet { get; set; }
 
+    public DbSet<User> UserDbSet { get; set; }
 }

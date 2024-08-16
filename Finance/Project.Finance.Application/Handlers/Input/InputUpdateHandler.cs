@@ -5,12 +5,11 @@ using Project.Finance.Domain.Interfaces.Services;
 
 namespace Project.Finance.Application.Handlers.Input;
 
-public class InputUpdateHandler(IInputService service, IMapper mapper) : IRequestHandler<InputUpdateRequest, InputResponse>
+public class InputUpdateHandler(IInputService service, IMapper mapper) : IRequestHandler<InputUpdateRequest>
 {
-    public async Task<InputResponse> Handle(InputUpdateRequest request, CancellationToken cancellationToken)
+    public async Task Handle(InputUpdateRequest request, CancellationToken cancellationToken)
     {
         var input = mapper.Map<Domain.Entites.Input>(request);
-        var inputUpdated = await service.Update(input.Id, input);
-        return mapper.Map<InputResponse>(inputUpdated);
+        await service.Update(input.Id, input);
     }
 }

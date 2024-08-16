@@ -2,7 +2,7 @@
 
 namespace Project.Finance.Application.Commands.Output;
 
-public class OutputUpdateRequest : IRequest<OutputResponse>
+public class OutputUpdateRequest : IRequest
 {
     public Guid Id { get; set; }
 

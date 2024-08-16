@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.Finance.Application.Commands.Input;
 
@@ -6,35 +7,46 @@ namespace Project.Finance.Controllers;
 
 [ApiController]
 [Route("api/finance/input")]
-public class InputController(IMediator mediator)
+public class InputController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
+    [Authorize]
     public Task<List<InputResponse>> GetAll()
     {
         return mediator.Send(new InputGetAllRequest());
     }
 
     [HttpGet("{id}")]
+    [Authorize]
     public Task<InputResponse> GetById(Guid id)
     {
         return mediator.Send(new InputGetByIdRequest(id));
     }
 
     [HttpPost]
-    public Task<InputResponse> Insert([FromBody] InputInsertRequest request)
+    [Authorize]
+    public async Task<IActionResult> Insert([FromBody] InputInsertRequest request)
     {
-        return mediator.Send(request);
+        await mediator.Send(request);
+        Response.StatusCode = 201;
+        return Created();
     }
 
     [HttpPut]
-    public Task<InputResponse> Update([FromBody] InputUpdateRequest request)
+    [Authorize]
+    public async Task<IActionResult> Update([FromBody] InputUpdateRequest request)
     {
-        return mediator.Send(request);
+        await mediator.Send(request);
+
+        return Ok();
     }
 
     [HttpDelete("{id}")]
-    public Task<InputResponse> Delete(Guid id)
+    [Authorize]
+    public async Task<IActionResult> Delete(Guid id)
     {
-        return mediator.Send(new InputDeleteRequest(id));
+        await mediator.Send(new InputDeleteRequest(id));
+
+        return Ok();
     }
 }

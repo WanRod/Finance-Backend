@@ -16,17 +16,27 @@ public class OutputService(IOutputRepository repository) : IOutputService
         return repository.GetById(id);
     }
 
-    public Task<Output> Insert(Output entity)
+    public async Task Insert(Output entity)
     {
-        return repository.Insert(entity);
+        if (entity.Value > 0)
+        {
+            entity.Value *= -1;
+        }
+
+        await repository.Insert(entity);
     }
 
-    public Task<Output> Update(Guid id, Output entity)
+    public async Task Update(Guid id, Output entity)
     {
-        return repository.Update(id, entity);
+        if (entity.Value > 0)
+        {
+            entity.Value *= -1;
+        }
+
+        await repository.Update(id, entity);
     }
-    public Task<Output> Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        return repository.Delete(id);
+        await repository.Delete(id);
     }
 }

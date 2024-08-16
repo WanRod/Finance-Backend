@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Project.Finance.Application;
 using Project.Finance.Infrastructure;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -9,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add dependency injection
 builder.Services.FinanceDependencyInjection();
+builder.Services.AddHttpContextAccessor();
 
 // Config connection string
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -33,21 +37,66 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddSwaggerGen(opt =>
 {
-    //options.EnableAnnotations();
-    options.UseInlineDefinitionsForEnums();
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Description do JWT",
+    });
 
-    options.SwaggerDoc("v1", new OpenApiInfo
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme()
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+
+    //opt.EnableAnnotations();
+    opt.UseInlineDefinitionsForEnums();
+
+    opt.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Finance Web API",
-        Version = "0.1.0",
+        Version = "0.2.0",
         Contact = new OpenApiContact
         {
             Email = "wanrod.dev@gmail.com",
-            Name = "Developed by WanRod",
+            Name = "the developer: WanRod",
         }
     });
+});
+
+builder.Services.AddAuthentication(opt =>
+{
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}
+).AddJwtBearer(opt =>
+{
+    opt.TokenValidationParameters = new()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!)),
+        ClockSkew = TimeSpan.Zero
+    };
 });
 
 var app = builder.Build();
@@ -60,6 +109,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

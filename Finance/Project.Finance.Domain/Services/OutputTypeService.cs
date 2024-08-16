@@ -16,17 +16,17 @@ public class OutputTypeService(IOutputTypeRepository repository) : IOutputTypeSe
         return repository.GetById(id);
     }
 
-    public Task<OutputType> Insert(OutputType entity)
+    public async Task Insert(OutputType entity)
     {
-        return repository.Insert(entity);
+        await repository.Insert(entity);
     }
 
-    public Task<OutputType> Update(Guid id, OutputType entity)
+    public async Task Update(Guid id, OutputType entity)
     {
-        return repository.Update(id, entity);
+        await repository.Update(id, entity);
     }
-    public Task<OutputType> Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        return repository.Delete(id);
+        await repository.Delete(id);
     }
 }

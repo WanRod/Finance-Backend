@@ -1,15 +1,13 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Project.Finance.Application.Commands.Input;
 using Project.Finance.Domain.Interfaces.Services;
 
 namespace Project.Finance.Application.Handlers.Input;
 
-public class InputDeleteHandler(IInputService service, IMapper mapper) : IRequestHandler<InputDeleteRequest, InputResponse>
+public class InputDeleteHandler(IInputService service) : IRequestHandler<InputDeleteRequest>
 {
-    public async Task<InputResponse> Handle(InputDeleteRequest request, CancellationToken cancellationToken)
+    public async Task Handle(InputDeleteRequest request, CancellationToken cancellationToken)
     {
-        var input = await service.Delete(request.Id);
-        return mapper.Map<InputResponse>(input);
+        await service.Delete(request.Id);
     }
 }

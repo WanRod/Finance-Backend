@@ -12,4 +12,7 @@ public class OutputType
 
     [Column("description")]
     public required string Description { get; set; }
+
+    [Column("created_by")]
+    public Guid CreatedBy { get; set; }
 }

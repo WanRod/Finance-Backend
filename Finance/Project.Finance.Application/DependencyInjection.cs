@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Project.Finance.Domain.Interfaces;
 using Project.Finance.Domain.Interfaces.Repositories;
 using Project.Finance.Domain.Interfaces.Services;
 using Project.Finance.Domain.Services;
+using Project.Finance.Infrastructure;
 using Project.Finance.Infrastructure.Repositories;
 
 namespace Project.Finance.Application;
@@ -21,6 +23,13 @@ public static class DependencyInjection
 
         services.AddScoped<IDashboardRepository, DashboardRepository>();
         services.AddScoped<IDashboardService, DashboardService>();
+
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserService, UserService>();
+
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+        services.AddScoped<IUserContext, UserContext>();
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DependencyInjection).Assembly));
         services.AddAutoMapper(typeof(DependencyInjection).Assembly);

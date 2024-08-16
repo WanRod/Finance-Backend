@@ -2,7 +2,7 @@
 
 namespace Project.Finance.Application.Commands.OutputType;
 
-public class OutputTypeDeleteRequest(Guid id) : IRequest<OutputTypeResponse>
+public class OutputTypeDeleteRequest(Guid id) : IRequest
 {
     public Guid Id { get; } = id;
 }

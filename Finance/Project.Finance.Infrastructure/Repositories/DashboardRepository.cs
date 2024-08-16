@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Project.Finance.Domain.Entites;
+using Project.Finance.Domain.Interfaces;
 using Project.Finance.Domain.Interfaces.Repositories;
 
 namespace Project.Finance.Infrastructure.Repositories;
 
-public class DashboardRepository(FinanceDbContext dbContext) : IDashboardRepository
+public class DashboardRepository(FinanceDbContext dbContext, IUserContext userContext) : IDashboardRepository
 {
     public async Task<Dashboard> GetData(int year, int month)
     {
         var inputOutputData = await dbContext.InputDbSet
-            .Where(e => e.Date.Year == year)
+            .Where(e => e.CreatedBy == userContext.UserId && e.Date.Year == year)
             .GroupBy(e => e.Date.Month)
             .Select(g => new
             {
@@ -19,7 +20,7 @@ public class DashboardRepository(FinanceDbContext dbContext) : IDashboardReposit
             .ToListAsync();
 
         var outputData = await dbContext.OutputDbSet
-            .Where(e => e.Date.Year == year)
+            .Where(e => e.CreatedBy == userContext.UserId && e.Date.Year == year)
             .GroupBy(e => e.Date.Month)
             .Select(g => new
             {
@@ -29,7 +30,7 @@ public class DashboardRepository(FinanceDbContext dbContext) : IDashboardReposit
             .ToListAsync();
 
         var outputTypes = await dbContext.OutputDbSet
-            .Where(e => e.Date.Year == year && e.Date.Month == month)
+            .Where(e => e.CreatedBy == userContext.UserId && e.Date.Year == year && e.Date.Month == month)
             .GroupBy(o => o.OutputType.Description)
             .Select(g => new
             {

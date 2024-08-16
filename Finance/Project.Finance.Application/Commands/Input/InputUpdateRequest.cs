@@ -2,7 +2,7 @@
 
 namespace Project.Finance.Application.Commands.Input;
 
-public class InputUpdateRequest : IRequest<InputResponse>
+public class InputUpdateRequest : IRequest
 {
     public Guid Id { get; set; }
 

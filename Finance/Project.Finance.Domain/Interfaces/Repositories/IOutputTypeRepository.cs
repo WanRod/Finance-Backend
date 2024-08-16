@@ -8,9 +8,9 @@ public interface IOutputTypeRepository
 
     Task<OutputType?> GetById(Guid id);
 
-    Task<OutputType> Insert(OutputType entity);
+    Task Insert(OutputType entity);
 
-    Task<OutputType> Update(Guid id, OutputType entity);
+    Task Update(Guid id, OutputType entity);
 
-    Task<OutputType> Delete(Guid id);
+    Task Delete(Guid id);
 }

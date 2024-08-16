@@ -16,17 +16,17 @@ public class InputService(IInputRepository repository) : IInputService
         return repository.GetById(id);
     }
 
-    public Task<Input> Insert(Input entity)
+    public async Task Insert(Input entity)
     {
-        return repository.Insert(entity);
+        await repository.Insert(entity);
     }
 
-    public Task<Input> Update(Guid id, Input entity)
+    public async Task Update(Guid id, Input entity)
     {
-        return repository.Update(id, entity);
+        await repository.Update(id, entity);
     }
-    public Task<Input> Delete(Guid id)
+    public async Task Delete(Guid id)
     {
-        return repository.Delete(id);
+        await repository.Delete(id);
     }
 }

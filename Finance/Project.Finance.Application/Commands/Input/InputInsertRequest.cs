@@ -2,7 +2,7 @@
 
 namespace Project.Finance.Application.Commands.Input;
 
-public class InputInsertRequest : IRequest<InputResponse>
+public class InputInsertRequest : IRequest
 {
     public required string Description { get; set; }
 
