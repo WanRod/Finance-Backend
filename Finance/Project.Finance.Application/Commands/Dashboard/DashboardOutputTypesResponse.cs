@@ -5,4 +5,6 @@ public class DashboardOutputTypesResponse
     public string Description { get; set; } = null!;
 
     public int Amount { get; set; }
+
+    public decimal Total { get; set; }
 }

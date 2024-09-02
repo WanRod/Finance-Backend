@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Project.Finance.Application.Commands.User;
 
-namespace Project.Finance.Application.Mapper;
+namespace Project.Finance.Application.Mappers;
 
 public class UserProfile : Profile
 {

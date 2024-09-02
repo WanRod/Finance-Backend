@@ -2,7 +2,7 @@
 using Project.Finance.Application.Commands.OutputType;
 using Project.Finance.Domain.Entites;
 
-namespace Project.Finance.Application.Mapper;
+namespace Project.Finance.Application.Mappers;
 
 public class OutputTypeProfile : Profile
 {

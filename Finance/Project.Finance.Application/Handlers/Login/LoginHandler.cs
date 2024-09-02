@@ -6,8 +6,15 @@ namespace Project.Finance.Application.Handlers.Login;
 
 public class LoginHandler(IUserService userService, IAuthenticationService authenticationService) : IRequestHandler<LoginRequest, LoginResponse>
 {
+    private string ClearCpfCnpj(string cpfCnpj)
+    {
+        return cpfCnpj.Replace(".", "").Replace("-", "").Replace("/", "");
+    }
+
     public async Task<LoginResponse> Handle(LoginRequest request, CancellationToken cancellationToken)
     {
+        request.CpfCnpj = ClearCpfCnpj(request.CpfCnpj);
+
         var user = await userService.GetByCpfCnpj(request.CpfCnpj) ??
             throw new Exception("User does not exists");
 
@@ -22,5 +29,10 @@ public class LoginHandler(IUserService userService, IAuthenticationService authe
         {
             Token = authenticationService.GenerateToken(user.Id, request.CpfCnpj)
         };
+    }
+
+    private void Validations()
+    {
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Project.Finance.Application.Mapper;
+namespace Project.Finance.Application.Mappers;
 
 public class LoginProfile : Profile
 {

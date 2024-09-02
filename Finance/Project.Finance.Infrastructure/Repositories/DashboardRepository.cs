@@ -35,7 +35,8 @@ public class DashboardRepository(FinanceDbContext dbContext, IUserContext userCo
             .Select(g => new
             {
                 Description = g.Key,
-                Amount = g.Count()
+                Amount = g.Count(),
+                Total = g.Sum(e => e.Value)
             })
             .OrderByDescending(x => x.Amount)
             .ThenBy(x => x.Description)
@@ -58,7 +59,8 @@ public class DashboardRepository(FinanceDbContext dbContext, IUserContext userCo
             dashboard.OutputTypes.Add(new DashboardOutputTypes()
             {
                 Description = outputType.Description,
-                Amount = outputType.Amount
+                Amount = outputType.Amount,
+                Total = outputType.Total,
             });
         }
 

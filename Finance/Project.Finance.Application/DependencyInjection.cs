@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.Extensions.DependencyInjection;
 using Project.Finance.Domain.Interfaces;
 using Project.Finance.Domain.Interfaces.Repositories;
 using Project.Finance.Domain.Interfaces.Services;
@@ -33,6 +35,10 @@ public static class DependencyInjection
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DependencyInjection).Assembly));
         services.AddAutoMapper(typeof(DependencyInjection).Assembly);
+
+        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+        services.AddFluentValidationAutoValidation();
+        services.AddFluentValidationClientsideAdapters();
 
         return services;
     }
