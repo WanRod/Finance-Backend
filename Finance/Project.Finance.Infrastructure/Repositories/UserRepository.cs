@@ -24,7 +24,7 @@ public class UserRepository(FinanceDbContext dbContext) : IUserRepository
 
     public async Task Update(Guid id, User entity)
     {
-        var currentyEntity = await dbContext.UserDbSet.FindAsync(id) ?? throw new Exception();
+        var currentyEntity = await dbContext.UserDbSet.FindAsync(id) ?? throw new Exception("O usuário não foi encontrado.");
 
         dbContext.Update(currentyEntity).CurrentValues.SetValues(entity);
         await dbContext.SaveChangesAsync();
@@ -32,7 +32,7 @@ public class UserRepository(FinanceDbContext dbContext) : IUserRepository
 
     public async Task Delete(Guid id)
     {
-        var entity = await dbContext.UserDbSet.FindAsync(id) ?? throw new Exception();
+        var entity = await dbContext.UserDbSet.FindAsync(id) ?? throw new Exception("O usuário não foi encontrado.");
 
         dbContext.UserDbSet.Remove(entity);
         await dbContext.SaveChangesAsync();

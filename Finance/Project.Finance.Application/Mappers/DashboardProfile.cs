@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Project.Finance.Application.Commands.Dashboard;
-using Project.Finance.Domain.Entites;
+using Project.Finance.Domain.Data;
 
 namespace Project.Finance.Application.Mappers;
 

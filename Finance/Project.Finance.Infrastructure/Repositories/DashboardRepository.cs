@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Project.Finance.Domain.Entites;
+using Project.Finance.Domain.Data;
 using Project.Finance.Domain.Interfaces;
 using Project.Finance.Domain.Interfaces.Repositories;
 
@@ -50,7 +50,7 @@ public class DashboardRepository(FinanceDbContext dbContext, IUserContext userCo
         {
             TotalInput = totalInput,
             TotalOutput = totalOutput,
-            PercentSpent = totalInput != 0 ? Math.Round((totalOutput / totalInput) * -100, 2) : 0,
+            PercentSpent = totalInput != 0 ? Math.Round(totalOutput / totalInput * -100, 2) : 0,
             RemainingAmount = totalOutput > totalInput ? Math.Round(totalInput - totalOutput, 2) : Math.Round(totalInput + totalOutput, 2)
         };
 
@@ -76,6 +76,4 @@ public class DashboardRepository(FinanceDbContext dbContext, IUserContext userCo
 
         return dashboard;
     }
-
-
 }

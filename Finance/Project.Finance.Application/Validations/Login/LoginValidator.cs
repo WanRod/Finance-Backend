@@ -10,18 +10,19 @@ public class LoginValidator : AbstractValidator<LoginRequest>
         RuleFor(validation => validation).Custom(LoginValidations);
     }
 
-    public void LoginValidations(LoginRequest request, ValidationContext<LoginRequest> context)
+    private void LoginValidations(LoginRequest request, ValidationContext<LoginRequest> context)
     {
         request.CpfCnpj = request.CpfCnpj.Replace(".", "").Replace("-", "").Replace("/", "").Trim();
+        request.Password = request.Password.Trim();
 
         if (request.CpfCnpj.Length != 11 && request.CpfCnpj.Length != 14)
         {
-            context.AddFailure("O comprimento é inválido para um CPF ou CNPJ.");
+            context.AddFailure("CPF ou CNPJ inválido.");
         }
 
-        if (context is not null)
+        if (string.IsNullOrEmpty(request.Password))
         {
-            return;
+            context.AddFailure("A senha é obrigatória.");
         }
     }
 }

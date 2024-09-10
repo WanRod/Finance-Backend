@@ -1,4 +1,4 @@
-﻿using Project.Finance.Domain.Entites;
+﻿using Project.Finance.Domain.Data;
 using Project.Finance.Domain.Interfaces.Repositories;
 using Project.Finance.Domain.Interfaces.Services;
 

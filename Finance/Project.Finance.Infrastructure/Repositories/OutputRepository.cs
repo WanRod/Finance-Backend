@@ -35,7 +35,7 @@ public class OutputRepository(FinanceDbContext dbContext, IUserContext userConte
 
     public async Task Update(Guid id, Output entity)
     {
-        var currentyEntity = await AsQueryable().FirstOrDefaultAsync(e => e.Id == id) ?? throw new Exception();
+        var currentyEntity = await AsQueryable().FirstOrDefaultAsync(e => e.Id == id) ?? throw new Exception("A saída não foi encontrada.");
         entity.CreatedBy = currentyEntity.CreatedBy;
 
         dbContext.Update(currentyEntity).CurrentValues.SetValues(entity);
@@ -44,7 +44,7 @@ public class OutputRepository(FinanceDbContext dbContext, IUserContext userConte
 
     public async Task Delete(Guid id)
     {
-        var entity = await AsQueryable().FirstOrDefaultAsync(e => e.Id == id) ?? throw new Exception();
+        var entity = await AsQueryable().FirstOrDefaultAsync(e => e.Id == id) ?? throw new Exception("A saída não foi encontrada.");
 
         dbContext.OutputDbSet.Remove(entity);
         await dbContext.SaveChangesAsync();

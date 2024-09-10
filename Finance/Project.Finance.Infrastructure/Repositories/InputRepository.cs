@@ -27,7 +27,7 @@ public class InputRepository(FinanceDbContext dbContext, IUserContext userContex
 
     public async Task Update(Guid id, Input entity)
     {
-        var currentyEntity = await dbContext.InputDbSet.FindAsync(id) ?? throw new Exception();
+        var currentyEntity = await dbContext.InputDbSet.FindAsync(id) ?? throw new Exception("A entrada não foi encontrada.");
         entity.CreatedBy = currentyEntity.CreatedBy;
 
         dbContext.Update(currentyEntity).CurrentValues.SetValues(entity);
@@ -36,7 +36,7 @@ public class InputRepository(FinanceDbContext dbContext, IUserContext userContex
 
     public async Task Delete(Guid id)
     {
-        var entity = await dbContext.InputDbSet.FindAsync(id) ?? throw new Exception();
+        var entity = await dbContext.InputDbSet.FindAsync(id) ?? throw new Exception("A entrada não foi encontrada.");
 
         dbContext.InputDbSet.Remove(entity);
         await dbContext.SaveChangesAsync();

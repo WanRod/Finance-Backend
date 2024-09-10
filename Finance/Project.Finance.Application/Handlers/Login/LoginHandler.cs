@@ -6,33 +6,21 @@ namespace Project.Finance.Application.Handlers.Login;
 
 public class LoginHandler(IUserService userService, IAuthenticationService authenticationService) : IRequestHandler<LoginRequest, LoginResponse>
 {
-    private string ClearCpfCnpj(string cpfCnpj)
-    {
-        return cpfCnpj.Replace(".", "").Replace("-", "").Replace("/", "");
-    }
-
     public async Task<LoginResponse> Handle(LoginRequest request, CancellationToken cancellationToken)
     {
-        request.CpfCnpj = ClearCpfCnpj(request.CpfCnpj);
-
         var user = await userService.GetByCpfCnpj(request.CpfCnpj) ??
-            throw new Exception("User does not exists");
+            throw new Exception("Usuário não foi encontrado.");
 
         var authenticationSuccess = await authenticationService.Authentication(request.CpfCnpj, request.Password);
 
         if (!authenticationSuccess)
         {
-            throw new Exception("Failed to authenticate");
+            throw new Exception("Falha ao autenticar. Confira seus dados e tente novamente.");
         }
 
         return new LoginResponse()
         {
             Token = authenticationService.GenerateToken(user.Id, request.CpfCnpj)
         };
-    }
-
-    private void Validations()
-    {
-
     }
 }

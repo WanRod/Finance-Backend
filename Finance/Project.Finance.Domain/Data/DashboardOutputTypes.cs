@@ -1,4 +1,4 @@
-﻿namespace Project.Finance.Domain.Entites;
+﻿namespace Project.Finance.Domain.Data;
 
 public class DashboardOutputTypes
 {

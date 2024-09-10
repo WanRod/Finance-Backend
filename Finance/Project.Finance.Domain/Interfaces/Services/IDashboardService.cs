@@ -1,4 +1,4 @@
-﻿using Project.Finance.Domain.Entites;
+﻿using Project.Finance.Domain.Data;
 
 namespace Project.Finance.Domain.Interfaces.Services;
 

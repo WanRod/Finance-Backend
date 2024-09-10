@@ -13,7 +13,7 @@ public class UserInsertHandler(IUserService service, IAuthenticationService auth
 
         if (userExists)
         {
-            throw new Exception();
+            throw new Exception("O usuário já existe.");
         }
 
         var user = mapper.Map<Domain.Entites.User>(request);

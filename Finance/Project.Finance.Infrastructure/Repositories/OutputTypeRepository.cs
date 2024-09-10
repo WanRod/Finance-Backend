@@ -27,7 +27,7 @@ public class OutputTypeRepository(FinanceDbContext dbContext, IUserContext userC
 
     public async Task Update(Guid id, OutputType entity)
     {
-        var currentyEntity = await dbContext.OutputTypeDbSet.FindAsync(id) ?? throw new Exception();
+        var currentyEntity = await dbContext.OutputTypeDbSet.FindAsync(id) ?? throw new Exception("O tipo de saída não foi encontrado.");
         entity.CreatedBy = currentyEntity.CreatedBy;
 
         dbContext.Update(currentyEntity).CurrentValues.SetValues(entity);
@@ -36,7 +36,7 @@ public class OutputTypeRepository(FinanceDbContext dbContext, IUserContext userC
 
     public async Task Delete(Guid id)
     {
-        var entity = await dbContext.OutputTypeDbSet.FindAsync(id) ?? throw new Exception();
+        var entity = await dbContext.OutputTypeDbSet.FindAsync(id) ?? throw new Exception("O tipo de saída não foi encontrado.");
 
         dbContext.OutputTypeDbSet.Remove(entity);
         await dbContext.SaveChangesAsync();
