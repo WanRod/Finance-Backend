@@ -38,7 +38,8 @@ public class DashboardRepository(FinanceDbContext dbContext, IUserContext userCo
                 Amount = g.Count(),
                 Total = g.Sum(e => e.Value)
             })
-            .OrderByDescending(x => x.Amount)
+            .OrderBy(x => x.Total)
+            .ThenBy(x => x.Amount)
             .ThenBy(x => x.Description)
             .Take(10)
             .ToListAsync();
