@@ -51,7 +51,7 @@ public class DashboardRepository(FinanceDbContext dbContext, IUserContext userCo
         {
             TotalInput = totalInput,
             TotalOutput = totalOutput,
-            PercentSpent = totalInput != 0 ? Math.Round(totalOutput / totalInput * -100, 2) : 0,
+            PercentSpent = totalInput != 0 ? Math.Round(totalOutput / totalInput * -100, 2) : Math.Round(totalOutput / 1, 2),
             RemainingAmount = totalOutput > totalInput ? Math.Round(totalInput - totalOutput, 2) : Math.Round(totalInput + totalOutput, 2)
         };
 
