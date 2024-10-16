@@ -10,7 +10,6 @@ public class UserUpdateHandler(IUserService service, IMapper mapper) : IRequestH
     public async Task Handle(UserUpdateRequest request, CancellationToken cancellationToken)
     {
         var user = mapper.Map<Domain.Entites.User>(request);
-        user.CpfCnpj = (await service.GetById(request.Id))!.CpfCnpj;
         await service.Update(user.Id, user);
     }
 }

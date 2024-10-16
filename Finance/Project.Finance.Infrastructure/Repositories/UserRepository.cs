@@ -6,7 +6,7 @@ namespace Project.Finance.Infrastructure.Repositories;
 
 public class UserRepository(FinanceDbContext dbContext) : IUserRepository
 {
-    public async Task<User?> GetById(Guid id)
+    public async Task<User?> GetData(Guid id)
     {
         return await dbContext.UserDbSet.FindAsync(id);
     }

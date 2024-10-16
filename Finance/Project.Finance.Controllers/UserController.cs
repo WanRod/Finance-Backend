@@ -2,18 +2,19 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Project.Finance.Application.Commands.User;
+using Project.Finance.Domain.Interfaces;
 
 namespace Project.Finance.Controllers;
 
 [ApiController]
 [Route("api/finance/user")]
-public class UserController(IMediator mediator) : ControllerBase
+public class UserController(IMediator mediator, IUserContext userContext) : ControllerBase
 {
-    [HttpGet("{id}")]
+    [HttpGet]
     [Authorize]
-    public Task<UserResponse> GetById(Guid id)
+    public Task<UserResponse> GetData()
     {
-        return mediator.Send(new UserGetByIdRequest(id));
+        return mediator.Send(new UserGetDataRequest(userContext.UserId));
     }
 
     [HttpPost]
@@ -28,16 +29,18 @@ public class UserController(IMediator mediator) : ControllerBase
     [Authorize]
     public async Task<IActionResult> Update([FromBody] UserUpdateRequest request)
     {
+        request.SetUserContext(userContext);
+
         await mediator.Send(request);
 
         return Ok();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete]
     [Authorize]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete()
     {
-        await mediator.Send(new UserDeleteRequest(id));
+        await mediator.Send(new UserDeleteRequest(userContext.UserId));
 
         return Ok();
     }

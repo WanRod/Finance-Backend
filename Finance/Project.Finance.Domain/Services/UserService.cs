@@ -10,9 +10,17 @@ public class UserService(IUserRepository repository) : IUserService
 {
     private const string _salt = "fsdgghfghgjngh";
 
-    public Task<User?> GetById(Guid id)
+    public async Task<User?> GetData(Guid id)
     {
-        return repository.GetById(id);
+        var data = await repository.GetData(id);
+
+        if (data is not null)
+        {
+            using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(_salt));
+            var computeHash = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(data.Password)));
+        }
+
+        return data;
     }
 
     public Task<User?> GetByCpfCnpj(string cpfCnpj)
@@ -30,6 +38,26 @@ public class UserService(IUserRepository repository) : IUserService
 
     public async Task Update(Guid id, User entity)
     {
+        var currentUser = await GetData(id) ??
+           throw new Exception("Não foi possível encontrar o usuário.");
+
+        if (string.IsNullOrEmpty(entity.Name))
+        {
+            entity.Name = currentUser.Name;
+        }
+
+        if (string.IsNullOrEmpty(entity.Password))
+        {
+            entity.Password = currentUser.Password;
+        }
+        else
+        {
+            using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(_salt));
+            entity.Password = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(entity.Password)));
+        }
+
+        entity.CpfCnpj = currentUser.CpfCnpj;
+
         await repository.Update(id, entity);
     }
 

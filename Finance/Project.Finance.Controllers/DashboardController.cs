@@ -9,10 +9,10 @@ namespace Project.Finance.Controllers;
 [Route("api/finance/dashboard")]
 public class DashboardController(IMediator mediator)
 {
-    [HttpGet("data/{year}/{month}")]
+    [HttpGet("data")]
     [Authorize]
-    public Task<DashboardResponse> GetData(int year, int month)
+    public Task<DashboardResponse> GetData([FromQuery] DashboardGetDataRequest request)
     {
-        return mediator.Send(new DashboardGetDataRequest(year, month));
+        return mediator.Send(request);
     }
 }

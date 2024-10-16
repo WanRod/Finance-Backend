@@ -4,7 +4,7 @@ namespace Project.Finance.Domain.Interfaces.Repositories;
 
 public interface IUserRepository
 {
-    Task<User?> GetById(Guid id);
+    Task<User?> GetData(Guid id);
 
     Task<User?> GetByCpfCnpj(string cpfCnpj);
 

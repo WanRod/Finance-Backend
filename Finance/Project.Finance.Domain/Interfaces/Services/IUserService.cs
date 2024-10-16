@@ -4,7 +4,7 @@ namespace Project.Finance.Domain.Interfaces.Services;
 
 public interface IUserService
 {
-    Task<User?> GetById(Guid id);
+    Task<User?> GetData(Guid id);
 
     Task<User?> GetByCpfCnpj(string cpfCnpj);
 
