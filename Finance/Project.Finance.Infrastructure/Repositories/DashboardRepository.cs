@@ -7,6 +7,20 @@ namespace Project.Finance.Infrastructure.Repositories;
 
 public class DashboardRepository(FinanceDbContext dbContext, IUserContext userContext) : IDashboardRepository
 {
+    public async Task<List<int>> GetAvailableYears()
+    {
+        return await dbContext.OutputDbSet
+            .Where(e => e.CreatedBy == userContext.UserId)
+            .Select(o => o.Date)
+            .Union(dbContext.InputDbSet
+                .Where(e => e.CreatedBy == userContext.UserId)
+                .Select(i => i.Date))
+            .Select(d => d.Year)
+            .Distinct()
+            .OrderByDescending(year => year)
+            .ToListAsync();
+    }
+
     public async Task<Dashboard> GetData(int year, int month)
     {
         var inputOutputData = await dbContext.InputDbSet
@@ -36,9 +50,9 @@ public class DashboardRepository(FinanceDbContext dbContext, IUserContext userCo
             {
                 Description = g.Key,
                 Amount = g.Count(),
-                Total = g.Sum(e => e.Value)
+                Total = g.Sum(e => e.Value) * -1
             })
-            .OrderBy(x => x.Total)
+            .OrderByDescending(x => x.Total)
             .ThenBy(x => x.Amount)
             .ThenBy(x => x.Description)
             .Take(10)
@@ -51,7 +65,7 @@ public class DashboardRepository(FinanceDbContext dbContext, IUserContext userCo
         {
             TotalInput = totalInput,
             TotalOutput = totalOutput,
-            PercentSpent = totalInput != 0 ? Math.Round(totalOutput / totalInput * -100, 2) : Math.Round(totalOutput / 1, 2),
+            PercentSpent = totalInput != 0 ? Math.Round(totalOutput / totalInput * -100, 2) : 0,
             RemainingAmount = totalOutput > totalInput ? Math.Round(totalInput - totalOutput, 2) : Math.Round(totalInput + totalOutput, 2)
         };
 
@@ -61,7 +75,7 @@ public class DashboardRepository(FinanceDbContext dbContext, IUserContext userCo
             {
                 Description = outputType.Description,
                 Amount = outputType.Amount,
-                Total = outputType.Total,
+                Total = outputType.Total * -1,
             });
         }
 

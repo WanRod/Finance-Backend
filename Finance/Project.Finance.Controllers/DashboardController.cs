@@ -9,6 +9,13 @@ namespace Project.Finance.Controllers;
 [Route("api/finance/dashboard")]
 public class DashboardController(IMediator mediator)
 {
+    [HttpGet("available-years")]
+    [Authorize]
+    public Task<List<int>> GetAvailableYears()
+    {
+        return mediator.Send(new DashboardGetAvailableYearsRequest());
+    }
+
     [HttpGet("data")]
     [Authorize]
     public Task<DashboardResponse> GetData([FromQuery] DashboardGetDataRequest request)

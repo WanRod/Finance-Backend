@@ -55,7 +55,7 @@ builder.Services.AddSwaggerGen(opt =>
     opt.SwaggerDoc("v1", new OpenApiInfo
     {
         Title = "Finance Web API",
-        Version = "0.2.0",
+        Version = "0.3.1",
         Contact = new OpenApiContact
         {
             Email = "wanrod.dev@gmail.com",
