@@ -9,7 +9,7 @@ public class OutputTypeGetAllHandler(IOutputTypeService service, IMapper mapper)
 {
     public async Task<List<OutputTypeResponse>> Handle(OutputTypeGetAllRequest request, CancellationToken cancellationToken)
     {
-        var outputTypes = await service.GetAll();
+        var outputTypes = await service.GetAll(request.Quantity);
         return mapper.Map<List<OutputTypeResponse>>(outputTypes);
     }
 }

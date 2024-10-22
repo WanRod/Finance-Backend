@@ -9,7 +9,7 @@ public class OutputGetAllHandler(IOutputService service, IMapper mapper) : IRequ
 {
     public async Task<List<OutputResponse>> Handle(OutputGetAllRequest request, CancellationToken cancellationToken)
     {
-        var outputs = await service.GetAll();
+        var outputs = await service.GetAll(request.Quantity);
         return mapper.Map<List<OutputResponse>>(outputs);
     }
 }

@@ -11,9 +11,9 @@ public class InputController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [Authorize]
-    public Task<List<InputResponse>> GetAll()
+    public Task<List<InputResponse>> GetAll([FromQuery] InputGetAllRequest request)
     {
-        return mediator.Send(new InputGetAllRequest());
+        return mediator.Send(request);
     }
 
     [HttpGet("{id}")]

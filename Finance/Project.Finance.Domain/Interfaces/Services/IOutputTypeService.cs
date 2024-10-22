@@ -4,7 +4,7 @@ namespace Project.Finance.Domain.Interfaces.Services;
 
 public interface IOutputTypeService
 {
-    Task<List<OutputType>> GetAll();
+    Task<List<OutputType>> GetAll(int? quantity = null);
 
     Task<OutputType?> GetById(Guid id);
 

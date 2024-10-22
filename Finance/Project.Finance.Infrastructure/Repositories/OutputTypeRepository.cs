@@ -7,8 +7,13 @@ namespace Project.Finance.Infrastructure.Repositories;
 
 public class OutputTypeRepository(FinanceDbContext dbContext, IUserContext userContext) : IOutputTypeRepository
 {
-    public async Task<List<OutputType>> GetAll()
+    public async Task<List<OutputType>> GetAll(int? quantity = null)
     {
+        if (quantity is not null)
+        {
+            return await dbContext.OutputTypeDbSet.Where(e => e.CreatedBy == userContext.UserId).OrderBy(e => e.Description).Take((int)quantity).ToListAsync();
+        }
+
         return await dbContext.OutputTypeDbSet.Where(e => e.CreatedBy == userContext.UserId).OrderBy(e => e.Description).ToListAsync();
     }
 

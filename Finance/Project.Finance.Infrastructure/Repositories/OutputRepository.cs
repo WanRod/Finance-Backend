@@ -15,9 +15,9 @@ public class OutputRepository(FinanceDbContext dbContext, IUserContext userConte
             .AsQueryable();
     }
 
-    public async Task<List<Output>> GetAll()
+    public async Task<List<Output>> GetAll(int quantity = 20)
     {
-        return await AsQueryable().Where(e => e.CreatedBy == userContext.UserId).OrderByDescending(e => e.Date).ToListAsync();
+        return await AsQueryable().OrderByDescending(e => e.Date).Take(quantity).ToListAsync();
     }
 
     public async Task<Output?> GetById(Guid id)

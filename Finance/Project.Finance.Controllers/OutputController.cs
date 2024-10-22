@@ -11,9 +11,9 @@ public class OutputController(IMediator mediator) : ControllerBase
 {
     [HttpGet]
     [Authorize]
-    public Task<List<OutputResponse>> GetAll()
+    public Task<List<OutputResponse>> GetAll([FromQuery] OutputGetAllRequest request)
     {
-        return mediator.Send(new OutputGetAllRequest());
+        return mediator.Send(request);
     }
 
     [HttpGet("{id}")]

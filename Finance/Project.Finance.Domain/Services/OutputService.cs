@@ -6,9 +6,9 @@ namespace Project.Finance.Domain.Services;
 
 public class OutputService(IOutputRepository repository) : IOutputService
 {
-    public Task<List<Output>> GetAll()
+    public Task<List<Output>> GetAll(int quantity)
     {
-        return repository.GetAll();
+        return repository.GetAll(quantity);
     }
 
     public Task<Output?> GetById(Guid id)

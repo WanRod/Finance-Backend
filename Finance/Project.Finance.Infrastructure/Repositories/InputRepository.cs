@@ -7,9 +7,9 @@ namespace Project.Finance.Infrastructure.Repositories;
 
 public class InputRepository(FinanceDbContext dbContext, IUserContext userContext) : IInputRepository
 {
-    public async Task<List<Input>> GetAll()
+    public async Task<List<Input>> GetAll(int quantity = 20)
     {
-        return await dbContext.InputDbSet.Where(e => e.CreatedBy == userContext.UserId).OrderByDescending(e => e.Date).ToListAsync();
+        return await dbContext.InputDbSet.Where(e => e.CreatedBy == userContext.UserId).OrderByDescending(e => e.Date).Take(quantity).ToListAsync();
     }
 
     public async Task<Input?> GetById(Guid id)

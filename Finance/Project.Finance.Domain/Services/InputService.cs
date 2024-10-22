@@ -6,9 +6,9 @@ namespace Project.Finance.Domain.Services;
 
 public class InputService(IInputRepository repository) : IInputService
 {
-    public Task<List<Input>> GetAll()
+    public Task<List<Input>> GetAll(int quantity = 20)
     {
-        return repository.GetAll();
+        return repository.GetAll(quantity);
     }
 
     public Task<Input?> GetById(Guid id)

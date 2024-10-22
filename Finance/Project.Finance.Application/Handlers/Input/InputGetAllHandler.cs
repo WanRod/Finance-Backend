@@ -9,7 +9,7 @@ public class InputGetAllHandler(IInputService service, IMapper mapper) : IReques
 {
     public async Task<List<InputResponse>> Handle(InputGetAllRequest request, CancellationToken cancellationToken)
     {
-        var inputs = await service.GetAll();
+        var inputs = await service.GetAll(request.Quantity);
         return mapper.Map<List<InputResponse>>(inputs);
     }
 }
