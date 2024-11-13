@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Project.Finance.Domain.Services;
 
-public class UserService(IUserRepository repository) : IUserService
+public class UserService(IUserRepository repository, IInputTypeService inputTypeService, IOutputTypeService outputTypeService) : IUserService
 {
     private const string _salt = "fsdgghfghgjngh";
 
@@ -33,7 +33,39 @@ public class UserService(IUserRepository repository) : IUserService
         using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(_salt));
         entity.Password = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(entity.Password)));
 
-        await repository.Insert(entity);
+        var user = await repository.Insert(entity);
+
+        await inputTypeService.Insert(new()
+        {
+            Description = "Dinheiro Físico",
+            CreatedBy = user.Id
+        });
+        await inputTypeService.Insert(new()
+        {
+            Description = "PIX",
+            CreatedBy = user.Id
+        });
+        await inputTypeService.Insert(new()
+        {
+            Description = "Rendimentos",
+            CreatedBy = user.Id
+        });
+
+        await outputTypeService.Insert(new()
+        {
+            Description = "Alimentação",
+            CreatedBy = user.Id
+        });
+        await outputTypeService.Insert(new()
+        {
+            Description = "Contas Recorrentes",
+            CreatedBy = user.Id
+        });
+        await outputTypeService.Insert(new()
+        {
+            Description = "Manutenção e Reparos",
+            CreatedBy = user.Id
+        });
     }
 
     public async Task Update(Guid id, User entity)

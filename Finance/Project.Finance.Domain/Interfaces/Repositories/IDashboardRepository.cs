@@ -1,4 +1,4 @@
-﻿using Project.Finance.Domain.Data;
+﻿using Project.Finance.Domain.Dtos;
 
 namespace Project.Finance.Domain.Interfaces.Repositories;
 

@@ -25,6 +25,10 @@ public class UserInsertValidator : AbstractValidator<UserInsertRequest>
         {
             context.AddFailure("O nome é obrigatório.");
         }
+        else if (request.Name.Length > 50)
+        {
+            context.AddFailure("O comprimento máximo do nome é de 50 caracteres.");
+        }
 
         if (request.CpfCnpj.Length != 11 && request.CpfCnpj.Length != 14)
         {
@@ -43,6 +47,10 @@ public class UserInsertValidator : AbstractValidator<UserInsertRequest>
         if (string.IsNullOrEmpty(request.Password))
         {
             context.AddFailure("A senha é obrigatória.");
+        }
+        else if (request.Password.Length > 50)
+        {
+            context.AddFailure("O comprimento máximo da senha é de 50 caracteres.");
         }
     }
 }

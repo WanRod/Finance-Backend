@@ -8,7 +8,7 @@ public interface IUserRepository
 
     Task<User?> GetByCpfCnpj(string cpfCnpj);
 
-    Task Insert(User entity);
+    Task<User> Insert(User entity);
 
     Task Update(Guid id, User entity);
 

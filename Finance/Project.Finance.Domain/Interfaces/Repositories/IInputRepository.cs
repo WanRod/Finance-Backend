@@ -4,7 +4,7 @@ namespace Project.Finance.Domain.Interfaces.Repositories;
 
 public interface IInputRepository
 {
-    Task<List<Input>> GetAll(int quantity = 20);
+    Task<List<Input>> GetAll(int? quantity);
 
     Task<Input?> GetById(Guid id);
 

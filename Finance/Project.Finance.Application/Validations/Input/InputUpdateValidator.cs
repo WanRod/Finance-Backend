@@ -21,7 +21,7 @@ public class InputUpdateValidator : AbstractValidator<InputUpdateRequest>
 
         if (request.Id == Guid.Empty)
         {
-            context.AddFailure("O id da entrada é obrigatório.");
+            context.AddFailure("O id da Entrada é obrigatório.");
         }
         else
         {
@@ -29,13 +29,31 @@ public class InputUpdateValidator : AbstractValidator<InputUpdateRequest>
 
             if (!inputExists)
             {
-                context.AddFailure("A entrada não foi encontrada.");
+                context.AddFailure("A Entrada não foi encontrada.");
+            }
+        }
+
+        if (request.InputTypeId == Guid.Empty)
+        {
+            context.AddFailure("O Tipo de Entrada é obrigatório.");
+        }
+        else
+        {
+            var inputTypeExists = _dbContext.InputTypeDbSet.Where(e => e.Id == request.InputTypeId).Any();
+
+            if (!inputTypeExists)
+            {
+                context.AddFailure("O tipo de Entrada não foi encontrado.");
             }
         }
 
         if (string.IsNullOrEmpty(request.Description))
         {
             context.AddFailure("A descrição é obrigatória.");
+        }
+        else if (request.Description.Length > 100)
+        {
+            context.AddFailure("O comprimento máximo da descrição é de 100 caracteres.");
         }
 
         if (request.Value == 0)

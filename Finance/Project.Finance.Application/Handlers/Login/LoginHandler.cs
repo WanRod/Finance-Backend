@@ -15,7 +15,7 @@ public class LoginHandler(IUserService userService, IAuthenticationService authe
 
         if (!authenticationSuccess)
         {
-            throw new Exception("Falha ao autenticar. Confira seus dados e tente novamente.");
+            throw new Exception("Falha ao autenticar, confira seus dados e tente novamente.");
         }
 
         return new LoginResponse()

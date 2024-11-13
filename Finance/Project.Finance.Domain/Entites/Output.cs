@@ -14,6 +14,7 @@ public class Output
     public Guid OutputTypeId { get; set; }
 
     [Column("description")]
+    [MaxLength(100)]
     public required string Description { get; set; }
 
     [Column("value")]

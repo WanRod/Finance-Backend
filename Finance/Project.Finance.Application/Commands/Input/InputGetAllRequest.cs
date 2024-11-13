@@ -4,5 +4,5 @@ namespace Project.Finance.Application.Commands.Input;
 
 public class InputGetAllRequest : IRequest<List<InputResponse>>
 {
-    public int Quantity { get; set; } = 20;
+    public int? Quantity { get; set; }
 }

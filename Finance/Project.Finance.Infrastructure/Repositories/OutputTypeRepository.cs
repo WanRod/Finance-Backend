@@ -7,24 +7,36 @@ namespace Project.Finance.Infrastructure.Repositories;
 
 public class OutputTypeRepository(FinanceDbContext dbContext, IUserContext userContext) : IOutputTypeRepository
 {
+    public IQueryable<OutputType> AsQueryable()
+    {
+        return dbContext.OutputTypeDbSet.Where(e => e.CreatedBy == userContext.UserId)
+                                        .AsQueryable();
+    }
+
     public async Task<List<OutputType>> GetAll(int? quantity = null)
     {
         if (quantity is not null)
         {
-            return await dbContext.OutputTypeDbSet.Where(e => e.CreatedBy == userContext.UserId).OrderBy(e => e.Description).Take((int)quantity).ToListAsync();
+            return await AsQueryable().OrderBy(e => e.Description)
+                                      .Take((int)quantity)
+                                      .ToListAsync();
         }
 
-        return await dbContext.OutputTypeDbSet.Where(e => e.CreatedBy == userContext.UserId).OrderBy(e => e.Description).ToListAsync();
+        return await AsQueryable().OrderBy(e => e.Description)
+                                  .ToListAsync();
     }
 
     public async Task<OutputType?> GetById(Guid id)
     {
-        return await dbContext.OutputTypeDbSet.FindAsync(id);
+        return await AsQueryable().SingleOrDefaultAsync(e => e.Id == id);
     }
 
     public async Task Insert(OutputType entity)
     {
-        entity.CreatedBy = userContext.UserId;
+        if (entity.CreatedBy == Guid.Empty)
+        {
+            entity.CreatedBy = userContext.UserId;
+        }
 
         dbContext.OutputTypeDbSet.Add(entity);
         await dbContext.SaveChangesAsync();
@@ -32,7 +44,9 @@ public class OutputTypeRepository(FinanceDbContext dbContext, IUserContext userC
 
     public async Task Update(Guid id, OutputType entity)
     {
-        var currentyEntity = await dbContext.OutputTypeDbSet.FindAsync(id) ?? throw new Exception("O tipo de saída não foi encontrado.");
+        var currentyEntity = await GetById(id) ??
+            throw new Exception("O Tipo de Saída não foi encontrado.");
+
         entity.CreatedBy = currentyEntity.CreatedBy;
 
         dbContext.Update(currentyEntity).CurrentValues.SetValues(entity);
@@ -41,7 +55,8 @@ public class OutputTypeRepository(FinanceDbContext dbContext, IUserContext userC
 
     public async Task Delete(Guid id)
     {
-        var entity = await dbContext.OutputTypeDbSet.FindAsync(id) ?? throw new Exception("O tipo de saída não foi encontrado.");
+        var entity = await GetById(id) ??
+            throw new Exception("O Tipo de Saída não foi encontrado.");
 
         dbContext.OutputTypeDbSet.Remove(entity);
         await dbContext.SaveChangesAsync();

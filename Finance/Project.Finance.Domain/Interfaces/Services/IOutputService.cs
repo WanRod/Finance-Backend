@@ -4,7 +4,7 @@ namespace Project.Finance.Domain.Interfaces.Services;
 
 public interface IOutputService
 {
-    Task<List<Output>> GetAll(int quantity = 20);
+    Task<List<Output>> GetAll(int? quantity);
 
     Task<Output?> GetById(Guid id);
 

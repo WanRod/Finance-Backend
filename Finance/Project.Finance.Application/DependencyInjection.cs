@@ -14,6 +14,12 @@ public static class DependencyInjection
 {
     public static IServiceCollection FinanceDependencyInjection(this IServiceCollection services)
     {
+        services.AddScoped<IDashboardRepository, DashboardRepository>();
+        services.AddScoped<IDashboardService, DashboardService>();
+
+        services.AddScoped<IInputTypeRepository, InputTypeRepository>();
+        services.AddScoped<IInputTypeService, InputTypeService>();
+
         services.AddScoped<IInputRepository, InputRepository>();
         services.AddScoped<IInputService, InputService>();
 
@@ -22,9 +28,6 @@ public static class DependencyInjection
 
         services.AddScoped<IOutputRepository, OutputRepository>();
         services.AddScoped<IOutputService, OutputService>();
-
-        services.AddScoped<IDashboardRepository, DashboardRepository>();
-        services.AddScoped<IDashboardService, DashboardService>();
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserService, UserService>();

@@ -7,19 +7,37 @@ namespace Project.Finance.Infrastructure.Repositories;
 
 public class InputRepository(FinanceDbContext dbContext, IUserContext userContext) : IInputRepository
 {
-    public async Task<List<Input>> GetAll(int quantity = 20)
+    public IQueryable<Input> AsQueryable()
     {
-        return await dbContext.InputDbSet.Where(e => e.CreatedBy == userContext.UserId).OrderByDescending(e => e.Date).Take(quantity).ToListAsync();
+        return dbContext.InputDbSet.Include(e => e.InputType)
+                                   .Where(e => e.CreatedBy == userContext.UserId)
+                                   .AsQueryable();
+    }
+
+    public async Task<List<Input>> GetAll(int? quantity)
+    {
+        if (quantity is not null)
+        {
+            return await AsQueryable().OrderByDescending(e => e.Date)
+                                  .Take((int)quantity)
+                                  .ToListAsync();
+        }
+
+        return await AsQueryable().OrderByDescending(e => e.Date)
+                                  .ToListAsync();
     }
 
     public async Task<Input?> GetById(Guid id)
     {
-        return await dbContext.InputDbSet.FindAsync(id);
+        return await AsQueryable().SingleOrDefaultAsync(e => e.Id == id);
     }
 
     public async Task Insert(Input entity)
     {
-        entity.CreatedBy = userContext.UserId;
+        if (entity.CreatedBy == Guid.Empty)
+        {
+            entity.CreatedBy = userContext.UserId;
+        }
 
         dbContext.InputDbSet.Add(entity);
         await dbContext.SaveChangesAsync();
@@ -27,7 +45,9 @@ public class InputRepository(FinanceDbContext dbContext, IUserContext userContex
 
     public async Task Update(Guid id, Input entity)
     {
-        var currentyEntity = await dbContext.InputDbSet.FindAsync(id) ?? throw new Exception("A entrada não foi encontrada.");
+        var currentyEntity = await GetById(id) ??
+            throw new Exception("A Entrada não foi encontrada.");
+
         entity.CreatedBy = currentyEntity.CreatedBy;
 
         dbContext.Update(currentyEntity).CurrentValues.SetValues(entity);
@@ -36,7 +56,8 @@ public class InputRepository(FinanceDbContext dbContext, IUserContext userContex
 
     public async Task Delete(Guid id)
     {
-        var entity = await dbContext.InputDbSet.FindAsync(id) ?? throw new Exception("A entrada não foi encontrada.");
+        var entity = await GetById(id) ??
+            throw new Exception("A Entrada não foi encontrada.");
 
         dbContext.InputDbSet.Remove(entity);
         await dbContext.SaveChangesAsync();

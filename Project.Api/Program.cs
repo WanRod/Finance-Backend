@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -62,6 +63,25 @@ builder.Services.AddSwaggerGen(opt =>
             Name = "WanRod"
         }
     });
+});
+
+builder.Services.AddMvc().ConfigureApiBehaviorOptions(options =>
+{
+    options.InvalidModelStateResponseFactory = c =>
+    {
+        var errors = c.ModelState.Values
+            .Where(v => v.Errors.Count > 0)
+            .SelectMany(v => v.Errors)
+            .Select(v => v.ErrorMessage)
+            .ToList();
+
+        return new BadRequestObjectResult(new
+        {
+            status_code = StatusCodes.Status400BadRequest,
+            message = errors.Select(e => new { error = e }).ToList(),
+            date_time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+        });
+    };
 });
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

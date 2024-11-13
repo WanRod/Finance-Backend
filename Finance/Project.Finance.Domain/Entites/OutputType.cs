@@ -11,6 +11,7 @@ public class OutputType
     public Guid Id { get; set; }
 
     [Column("description")]
+    [MaxLength(100)]
     public required string Description { get; set; }
 
     [Column("created_by")]

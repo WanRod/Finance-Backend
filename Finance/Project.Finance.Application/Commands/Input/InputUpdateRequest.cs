@@ -6,6 +6,8 @@ public class InputUpdateRequest : IRequest
 {
     public Guid Id { get; set; }
 
+    public Guid InputTypeId { get; set; }
+
     public required string Description { get; set; }
 
     public decimal Value { get; set; }

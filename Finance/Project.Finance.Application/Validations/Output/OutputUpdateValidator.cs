@@ -21,7 +21,7 @@ public class OutputUpdateValidator : AbstractValidator<OutputUpdateRequest>
 
         if (request.Id == Guid.Empty)
         {
-            context.AddFailure("O id da saída é obrigatório.");
+            context.AddFailure("O id da Saída é obrigatório.");
         }
         else
         {
@@ -29,23 +29,13 @@ public class OutputUpdateValidator : AbstractValidator<OutputUpdateRequest>
 
             if (!outputExists)
             {
-                context.AddFailure("A saída não foi encontrada.");
+                context.AddFailure("A Saída não foi encontrada.");
             }
-        }
-
-        if (string.IsNullOrEmpty(request.Description))
-        {
-            context.AddFailure("A descrição é obrigatória.");
-        }
-
-        if (request.Value == 0)
-        {
-            context.AddFailure("O valor da saída não pode ser 0.");
         }
 
         if (request.OutputTypeId == Guid.Empty)
         {
-            context.AddFailure("O tipo de saída é obrigatório.");
+            context.AddFailure("O Tipo de Saída é obrigatório.");
         }
         else
         {
@@ -53,8 +43,22 @@ public class OutputUpdateValidator : AbstractValidator<OutputUpdateRequest>
 
             if (!outputTypeExists)
             {
-                context.AddFailure("O tipo de saída não foi encontrado.");
+                context.AddFailure("O tipo de Saída não foi encontrado.");
             }
+        }
+
+        if (string.IsNullOrEmpty(request.Description))
+        {
+            context.AddFailure("A descrição é obrigatória.");
+        }
+        else if (request.Description.Length > 100)
+        {
+            context.AddFailure("O comprimento máximo da descrição é de 100 caracteres.");
+        }
+
+        if (request.Value == 0)
+        {
+            context.AddFailure("O valor da Saída não pode ser 0.");
         }
     }
 }

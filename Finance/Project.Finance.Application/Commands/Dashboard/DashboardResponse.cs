@@ -12,5 +12,7 @@ public class DashboardResponse
 
     public List<MonthlyDashboardResponse> Monthly { get; set; } = [];
 
-    public List<DashboardOutputTypesResponse> OutputTypes { get; set; } = [];
+    public List<DashboardInputTypeResponse> InputTypes { get; set; } = [];
+
+    public List<DashboardOutputTypeResponse> OutputTypes { get; set; } = [];
 }

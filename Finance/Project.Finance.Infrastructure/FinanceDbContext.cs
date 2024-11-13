@@ -19,9 +19,11 @@ public class FinanceDbContext : DbContext
 
     public DbSet<Input> InputDbSet { get; set; }
 
-    public DbSet<OutputType> OutputTypeDbSet { get; set; }
+    public DbSet<InputType> InputTypeDbSet { get; set; }
 
     public DbSet<Output> OutputDbSet { get; set; }
+
+    public DbSet<OutputType> OutputTypeDbSet { get; set; }
 
     public DbSet<User> UserDbSet { get; set; }
 }

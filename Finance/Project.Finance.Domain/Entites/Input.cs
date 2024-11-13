@@ -10,7 +10,11 @@ public class Input
     [Column("id")]
     public Guid Id { get; set; }
 
+    [Column("input_type_id")]
+    public Guid InputTypeId { get; set; }
+
     [Column("description")]
+    [MaxLength(100)]
     public required string Description { get; set; }
 
     [Column("value")]
@@ -21,4 +25,7 @@ public class Input
 
     [Column("created_by")]
     public Guid CreatedBy { get; set; }
+
+    [ForeignKey("InputTypeId")]
+    public required InputType InputType { get; set; }
 }

@@ -9,25 +9,35 @@ public class OutputRepository(FinanceDbContext dbContext, IUserContext userConte
 {
     public IQueryable<Output> AsQueryable()
     {
-        return dbContext.OutputDbSet
-            .Include(e => e.OutputType)
-            .Where(e => e.CreatedBy == userContext.UserId)
-            .AsQueryable();
+        return dbContext.OutputDbSet.Include(e => e.OutputType)
+                                    .Where(e => e.CreatedBy == userContext.UserId)
+                                    .AsQueryable();
     }
 
-    public async Task<List<Output>> GetAll(int quantity = 20)
+    public async Task<List<Output>> GetAll(int? quantity)
     {
-        return await AsQueryable().OrderByDescending(e => e.Date).Take(quantity).ToListAsync();
+        if (quantity is not null)
+        {
+            return await AsQueryable().OrderByDescending(e => e.Date)
+                                      .Take((int)quantity)
+                                      .ToListAsync();
+        }
+
+        return await AsQueryable().OrderByDescending(e => e.Date)
+                                  .ToListAsync();
     }
 
     public async Task<Output?> GetById(Guid id)
     {
-        return await AsQueryable().FirstOrDefaultAsync(e => e.Id == id);
+        return await AsQueryable().SingleOrDefaultAsync(e => e.Id == id);
     }
 
     public async Task Insert(Output entity)
     {
-        entity.CreatedBy = userContext.UserId;
+        if (entity.CreatedBy == Guid.Empty)
+        {
+            entity.CreatedBy = userContext.UserId;
+        }
 
         dbContext.OutputDbSet.Add(entity);
         await dbContext.SaveChangesAsync();
@@ -35,7 +45,9 @@ public class OutputRepository(FinanceDbContext dbContext, IUserContext userConte
 
     public async Task Update(Guid id, Output entity)
     {
-        var currentyEntity = await AsQueryable().FirstOrDefaultAsync(e => e.Id == id) ?? throw new Exception("A saída não foi encontrada.");
+        var currentyEntity = await GetById(id) ??
+            throw new Exception("A Saída não foi encontrada.");
+
         entity.CreatedBy = currentyEntity.CreatedBy;
 
         dbContext.Update(currentyEntity).CurrentValues.SetValues(entity);
@@ -44,7 +56,8 @@ public class OutputRepository(FinanceDbContext dbContext, IUserContext userConte
 
     public async Task Delete(Guid id)
     {
-        var entity = await AsQueryable().FirstOrDefaultAsync(e => e.Id == id) ?? throw new Exception("A saída não foi encontrada.");
+        var entity = await GetById(id) ??
+            throw new Exception("A Saída não foi encontrada.");
 
         dbContext.OutputDbSet.Remove(entity);
         await dbContext.SaveChangesAsync();
