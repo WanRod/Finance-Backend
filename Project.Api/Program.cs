@@ -19,7 +19,11 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks()
     .AddCheck("SimpleHealthCheck", () => HealthCheckResult.Healthy("The application is running."));
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = new[] { "PGHOST", "PGPORT", "PGDATABASE", "PGUSER", "PGPASSWORD" }
+    .Select(env => Environment.GetEnvironmentVariable(env))
+    .Any(string.IsNullOrEmpty)
+    ? builder.Configuration.GetConnectionString("DefaultConnection")
+    : $"Host={Environment.GetEnvironmentVariable("PGHOST")};Port={Environment.GetEnvironmentVariable("PGPORT")};Database={Environment.GetEnvironmentVariable("PGDATABASE")};Username={Environment.GetEnvironmentVariable("PGUSER")};Password={Environment.GetEnvironmentVariable("PGPASSWORD")};";
 
 builder.Services.AddDbContext<FinanceDbContext>(options => options.UseNpgsql(connectionString));
 
