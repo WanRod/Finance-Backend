@@ -3,14 +3,8 @@ using Project.Finance.Domain.Entites;
 
 namespace Project.Finance.Infrastructure;
 
-public class FinanceDbContext : DbContext
+public class FinanceDbContext(DbContextOptions<FinanceDbContext> options) : DbContext(options)
 {
-    //Create database if not exists
-    public FinanceDbContext(DbContextOptions<FinanceDbContext> options) : base(options)
-    {
-        Database.EnsureCreated();
-    }
-
     //Configure enums and schemas
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
