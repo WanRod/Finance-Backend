@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.FinanceDependencyInjection();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHealthChecks();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -102,6 +103,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
+app.UseHealthChecks("/health");
+
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>
@@ -136,4 +139,4 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.Run("http://localhost:1010");
+app.Run($"http://localhost:{Environment.GetEnvironmentVariable("PORT") ?? "8080"}");
